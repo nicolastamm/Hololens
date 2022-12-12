@@ -32,6 +32,8 @@ public class Launcher : MonoBehaviourPunCallbacks
     // Client version number. Used to separate clients.
     string gameVersion = "1";
 
+    bool isConnecting;
+
     #endregion
 
     #region MonoBehaviour CallBacks
@@ -68,7 +70,7 @@ public class Launcher : MonoBehaviourPunCallbacks
         }
         else
         {
-            PhotonNetwork.ConnectUsingSettings();
+            isConnecting = PhotonNetwork.ConnectUsingSettings();
             PhotonNetwork.GameVersion = gameVersion;
         }
     }
@@ -80,7 +82,12 @@ public class Launcher : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster()
     {
         Debug.Log("OnConnectedToMaster was called.");
-        PhotonNetwork.JoinRandomRoom();
+        if(isConnecting)
+        {
+            isConnecting = false;
+            PhotonNetwork.JoinRandomRoom();
+        }
+        
     }
 
     public override void OnDisconnected(DisconnectCause cause)
@@ -89,6 +96,8 @@ public class Launcher : MonoBehaviourPunCallbacks
 
         progressLabel.SetActive(false);
         controlPanel.SetActive(true);
+
+        isConnecting = false;
     }
 
     public override void OnJoinRandomFailed(short returnCode, string message)
@@ -101,6 +110,14 @@ public class Launcher : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         Debug.Log("OnJoinedRoom was called. This client is in a room.");
+        Debug.Log("Player Count should be 1. It is : " + PhotonNetwork.CurrentRoom.PlayerCount.ToString());
+
+        if(PhotonNetwork.CurrentRoom.PlayerCount == 1)
+        {
+            Debug.Log("We load 'MainRoom'");
+
+            PhotonNetwork.LoadLevel("MainRoom");
+        }
     }
     #endregion
 }
