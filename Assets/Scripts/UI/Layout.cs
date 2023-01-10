@@ -16,7 +16,9 @@ public class Layout : MonoBehaviour
     Transform TopRight;
     Transform BottomLeft;
     Transform BottomRight;
-    Dictionary<GameObject, Transform> Elements;
+    Dictionary<GameObject, Vector3> Elements;
+    Dictionary<GameObject, float> Scales;
+
     [SerializeField] Transform[] Objects;
     [SerializeField] int Columns;
     int Rows;
@@ -32,24 +34,27 @@ public class Layout : MonoBehaviour
         this.BottomLeft.gameObject.SetActive(false);
         this.BottomRight.gameObject.SetActive(false);
 
-        this.widthX = Math.Abs(this.TopRight.position.x - this.BottomRight.position.x);
-        this.heightZ = Math.Abs(this.BottomLeft.position.z - this.BottomRight.position.z);
+        this.widthX = Math.Abs(Math.Abs(this.TopRight.localPosition.x) + Math.Abs(this.BottomRight.localPosition.x));
+        this.heightZ = Math.Abs(Math.Abs(this.BottomLeft.localPosition.z) + Math.Abs(this.BottomRight.localPosition.z));
+        Debug.Log("TopRight" + TopRight.localPosition);
+        Debug.Log("BottomRight" + BottomRight.localPosition);
+        Debug.Log("BottomLeft" + BottomLeft.localPosition);
 
+        Debug.Log("width, height: " + widthX + " " + heightZ);
     }
     private void CreateObject(int index, int row, int column, Vector3 offset, Vector3 spacing)
     {
-        Debug.Log("width, height: " + widthX + " " + heightZ);
         Transform t = Objects[index];
         Vector3 realScale = t.localScale;
         //realScale.Scale(this.transform.InverseTransformPoint(Vector3.one));
         // Up (y)
-        float upPosition = realScale.y / 2;
+        float upPosition = realScale.y;
         // Left/right (x)
-        float rightPosition = offset.x + spacing.x * column;// - 2.0f * this.transform.localScale.x ;
+        float rightPosition = offset.x + spacing.x * column - 2.35f;// - 2.0f * this.transform.localScale.x ;
 
 
         // Forward (z)
-        float forwardPosition = (offset.z + spacing.z * row);// -1.5f * this.transform.localScale.z;
+        float forwardPosition = (offset.z + spacing.z * row) - 1.5f;// -1.5f * this.transform.localScale.z;
 
         Transform go = Instantiate(Objects[index], this.transform);
         go.localPosition = new Vector3(rightPosition, upPosition, forwardPosition);
@@ -67,12 +72,15 @@ public class Layout : MonoBehaviour
         go.gameObject.SetActive(true);
 
         go.gameObject.GetComponent<ObjectManipulator>().OnManipulationEnded.AddListener(this.handleDisplacement);
-        this.Elements.Add(go.gameObject, go.transform);
+        this.Elements.Add(go.gameObject, go.transform.localPosition);
+        this.Scales.Add(go.gameObject, go.transform.localScale.x);
 
     }
     void Start()
     {
-        this.Elements = new Dictionary<GameObject, Transform>();
+        this.Elements = new Dictionary<GameObject, Vector3>();
+        this.Scales= new Dictionary<GameObject, float>();
+
         this.Rows = this.Objects.Length / this.Columns;
         //Vector3 maxBounds = this.transform.localPosition + this.transform.localScale;
         this.GetBounds();
@@ -118,32 +126,63 @@ public class Layout : MonoBehaviour
     {
         GameObject obj = data.ManipulationSource;
         
-        if((obj.transform.position - this.Elements[obj].position).magnitude > obj.transform.localScale.magnitude)
+        if((obj.transform.localPosition - this.Elements[obj]).magnitude > obj.transform.localScale.magnitude)
         {
             Debug.Log("spawn new");
             //Spawn new
-            GameObject newObject = Instantiate(obj);
-            newObject.transform.SetPositionAndRotation(this.Elements[obj].position, this.Elements[obj].rotation);
+            GameObject newObject = Instantiate(obj, this.transform);
+            newObject.transform.localPosition= this.Elements[obj];
+            newObject.transform.localScale = new Vector3(this.Scales[obj], this.Scales[obj], this.Scales[obj]);
+            newObject.transform.localRotation = Quaternion.Euler(0, 0, 0);
+            newObject.gameObject.GetComponent<ObjectManipulator>().OnManipulationEnded.AddListener(this.handleDisplacement);
 
-            obj.transform.SetParent(null, false);
+            obj.transform.SetParent(null, true);
             this.Elements.Remove(obj);
-            this.Elements.Add(newObject,  newObject.transform);
-            obj?.gameObject.GetComponent<ObjectManipulator>()?.OnManipulationEnded.RemoveListener(this.handleDisplacement);
+            this.Elements.Add(newObject, newObject.transform.localPosition);
+
+
+            this.Scales.Remove(obj);
+            this.Scales.Add(newObject, newObject.transform.localScale.x);
+
+            obj?.gameObject?.GetComponent<ObjectManipulator>()?.OnManipulationEnded?.RemoveListener(this.handleDisplacement);
+
         }
         else
         {
             Debug.Log("reset position");
+            Debug.Log("ORIGINAL POS+ " + this.Elements[obj]);
+            Debug.Log("now POS+ " + obj.transform.localPosition);
+
 
             //Reset position
-            obj.transform.SetPositionAndRotation(this.Elements[obj].position, this.Elements[obj].rotation);
+            obj.transform.localPosition = this.Elements[obj];//.SetPositionAndRotation(this.Elements[obj].position, this.Elements[obj].rotation);
+            obj.transform.localRotation = Quaternion.Euler(0, 0, 0);
+            obj.transform.localScale = new Vector3(this.Scales[obj], this.Scales[obj], this.Scales[obj]);
+
         }
     }
+    public void ColorUpdated()
+    {
+        foreach (GameObject g in this.Elements.Keys)
+        {
+            g.GetComponent<MeshRenderer>().material.color = GameObject.Find("3DButton").GetComponent<MeshRenderer>().material.color;
 
+        }
+    }
+    public void MaterialUpdated(Material newMaterial)
+    {
+        foreach (GameObject g in this.Elements.Keys)
+        {
+            g.GetComponent<MeshRenderer>().material = newMaterial;
+            g.GetComponent<MeshRenderer>().material.color = GameObject.Find("3DButton").GetComponent<MeshRenderer>().material.color;
+
+        }
+    }
     private void OnDestroy()
     {
-        foreach(Transform g in this.Objects)
+        foreach(GameObject g in this.Elements.Keys)
         {
-            g?.gameObject.GetComponent<ObjectManipulator>()?.OnManipulationEnded.RemoveListener(this.handleDisplacement);
+            g?.gameObject?.GetComponent<ObjectManipulator>()?.OnManipulationEnded?.RemoveListener(this.handleDisplacement);
         }
     }
 }
