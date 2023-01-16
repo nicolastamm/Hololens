@@ -24,9 +24,9 @@ public class Layout : MonoBehaviour
     int Rows;
     private void GetBounds()
     {
-        this.TopLeft     = this.transform.Find("TopLeft");
-        this.TopRight    = this.transform.Find("TopRight");
-        this.BottomLeft  = this.transform.Find("BottomLeft");
+        this.TopLeft = this.transform.Find("TopLeft");
+        this.TopRight = this.transform.Find("TopRight");
+        this.BottomLeft = this.transform.Find("BottomLeft");
         this.BottomRight = this.transform.Find("BottomRight");
 
         this.TopLeft.gameObject.SetActive(false);
@@ -79,15 +79,15 @@ public class Layout : MonoBehaviour
     void Start()
     {
         this.Elements = new Dictionary<GameObject, Vector3>();
-        this.Scales= new Dictionary<GameObject, float>();
+        this.Scales = new Dictionary<GameObject, float>();
 
         this.Rows = this.Objects.Length / this.Columns;
         //Vector3 maxBounds = this.transform.localPosition + this.transform.localScale;
         this.GetBounds();
 
         float spacingX = this.widthX / this.Columns;
-        float spacingZ = this.heightZ / (this.Rows + Convert.ToInt32(this.Objects.Length % this.Rows !=0));
-        Vector3 spacing = new Vector3(spacingX , 0, spacingZ);
+        float spacingZ = this.heightZ / (this.Rows + Convert.ToInt32(this.Objects.Length % this.Rows != 0));
+        Vector3 spacing = new Vector3(spacingX, 0, spacingZ);
         Vector3 offset = spacing / 2;
 
         int index = 0;
@@ -97,7 +97,7 @@ public class Layout : MonoBehaviour
             for (column = 0; column < this.Columns; column++)
             {
                 index = this.Columns * row + column;
-                
+
                 this.CreateObject(index, row, column, offset, spacing);
             }
         }
@@ -105,11 +105,11 @@ public class Layout : MonoBehaviour
         for (column = 0; column < this.Columns; column++)
         {
             index = this.Columns * row + column;
-            if(index >= this.Objects.Length)
+            if (index >= this.Objects.Length)
             {
                 break;
             }
-        
+
             this.CreateObject(index, row, column, offset, spacing);
         }
 
@@ -125,13 +125,13 @@ public class Layout : MonoBehaviour
     public void handleDisplacement(ManipulationEventData data)
     {
         GameObject obj = data.ManipulationSource;
-        
-        if((obj.transform.localPosition - this.Elements[obj]).magnitude > obj.transform.localScale.magnitude)
+
+        if ((obj.transform.localPosition - this.Elements[obj]).magnitude > obj.transform.localScale.magnitude)
         {
             Debug.Log("spawn new");
             //Spawn new
             GameObject newObject = Instantiate(obj, this.transform);
-            newObject.transform.localPosition= this.Elements[obj];
+            newObject.transform.localPosition = this.Elements[obj];
             newObject.transform.localScale = new Vector3(this.Scales[obj], this.Scales[obj], this.Scales[obj]);
             newObject.transform.localRotation = Quaternion.Euler(0, 0, 0);
             newObject.gameObject.GetComponent<ObjectManipulator>().OnManipulationEnded.AddListener(this.handleDisplacement);
@@ -180,7 +180,7 @@ public class Layout : MonoBehaviour
     }
     private void OnDestroy()
     {
-        foreach(GameObject g in this.Elements.Keys)
+        foreach (GameObject g in this.Elements.Keys)
         {
             g?.gameObject?.GetComponent<ObjectManipulator>()?.OnManipulationEnded?.RemoveListener(this.handleDisplacement);
         }

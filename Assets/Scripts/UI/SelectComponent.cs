@@ -10,10 +10,4 @@ public class SelectComponent : MonoBehaviour
         this.SelectedObject = obj;
     }
     public void DeselectObject() { }
-
-    public void Debugger()
-    {
-        Debug.Log("Pressed");
-
-    }
 }
