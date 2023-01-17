@@ -205,22 +205,17 @@ using UnityEngine;
         #endregion
 
         #region Public Functions
+        // CHANGED 1
         /// <summary>
         /// This will set the visibility, scale, and position of the color picker while extracting the color of the touched object's MeshRenderer or SpriteRender
         /// </summary>
         public void SummonColorPicker(GameObject container)
         {
-            if(this.gameObject.activeSelf == true && this.timer >=0.5)
-            {
-                this.gameObject.SetActive(false);
-                return;
-            }
             this.gameObject.SetActive(true);
-            this.timer = 0;
             transform.localScale = Vector3.one;
         //transform.position = GameObject.Find(container.name + "/Anchor").transform.position;
             TargetObjectMesh = this.PickerUIMeshes[0];
-            //TargetObjectSprite = GameObject.Find(container.name + "/TargetObject (Sprite)").GetComponent<SpriteRenderer>();
+           // TargetObjectSprite = GameObject.Find("3DButton").GetComponent<SpriteRenderer>();
             ExtractColorFromMaterial(TargetObjectMesh);
         }
         /// <summary>
@@ -323,7 +318,7 @@ using UnityEngine;
                 if (rend != null)
                 {
                     rend.material.color = CustomColor;
-                    GameObject.Find("BlockBox").GetComponent<Layout>().ColorUpdated();
+                    GameObject.Find("BlockBox").GetComponent<ObjectManager>().ColorUpdated();
                    
                 }
             }

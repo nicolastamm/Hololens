@@ -1,34 +1,48 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System;
-using Microsoft.MixedReality.Toolkit.UI;
-using Microsoft.MixedReality.Toolkit.Input;
-using System.Linq;
-using Microsoft.MixedReality.Toolkit;
-using UnityEngine.Experimental.AI;
-
+/// <summary>
+/// Layout class is used to figure out where our objects should be placed
+/// Given bounds on a 3d container, it tries to place the objects in a grid layout on top of the container
+/// User needs to input the number of rows for layout in the editor
+/// 
+/// Known Issues:
+/// -
+/// 
+/// Known Limitations:
+/// - You should have more columns than elements, or it will throw exception
+/// - For some column values the layout offsets don't work, but should be okay for reasonable column/row sizes,
+///   it would take too much time to make the script robust to these limitations
+/// Notes:
+/// MUST be after the objectmanager script, configured in script execution order of project
+/// </summary>
 public class Layout : MonoBehaviour
 {
+    /// Width and height of the simluated grid
     float widthX;
     float heightZ;
+
+    // Helper objects to figure out the width/height
+    // Placed at bounds of the objcet in the scene
     Transform TopLeft;
     Transform TopRight;
     Transform BottomLeft;
     Transform BottomRight;
-    Dictionary<GameObject, Vector3> Elements;
-    Dictionary<GameObject, float> Scales;
 
-    [SerializeField] Transform[] Objects;
+    // User must specify how many columns for layout, rows are calculated
     [SerializeField] int Columns;
+    // ObjManager keeps/spawns the actual objects
+    private ObjectManager ObjManager;
     int Rows;
-    private void GetBounds()
+    /// <summary>
+    /// Figures out the width(x-dimension) and height(z-dimension) of our container
+    /// </summary>
+    private void CalculateBounds()
     {
         this.TopLeft = this.transform.Find("TopLeft");
         this.TopRight = this.transform.Find("TopRight");
         this.BottomLeft = this.transform.Find("BottomLeft");
         this.BottomRight = this.transform.Find("BottomRight");
-
+        // Only needed to figureout bounds, disabled 
         this.TopLeft.gameObject.SetActive(false);
         this.TopRight.gameObject.SetActive(false);
         this.BottomLeft.gameObject.SetActive(false);
@@ -36,153 +50,65 @@ public class Layout : MonoBehaviour
 
         this.widthX = Math.Abs(Math.Abs(this.TopRight.localPosition.x) + Math.Abs(this.BottomRight.localPosition.x));
         this.heightZ = Math.Abs(Math.Abs(this.BottomLeft.localPosition.z) + Math.Abs(this.BottomRight.localPosition.z));
-        Debug.Log("TopRight" + TopRight.localPosition);
-        Debug.Log("BottomRight" + BottomRight.localPosition);
-        Debug.Log("BottomLeft" + BottomLeft.localPosition);
-
-        Debug.Log("width, height: " + widthX + " " + heightZ);
     }
-    private void CreateObject(int index, int row, int column, Vector3 offset, Vector3 spacing)
+    private void CaculateObjectPosition(int index, int row, int column, Vector3 offset, Vector3 spacing)
     {
-        Transform t = Objects[index];
+        // Objects should be placed on top of the box
+        // Constants were a bit trial and error and might change if you replace the box object
+        Transform t = ObjManager.Objects[index];
         Vector3 realScale = t.localScale;
-        //realScale.Scale(this.transform.InverseTransformPoint(Vector3.one));
+
         // Up (y)
         float upPosition = realScale.y;
         // Left/right (x)
-        float rightPosition = offset.x + spacing.x * column - 2.35f;// - 2.0f * this.transform.localScale.x ;
-
+        float rightPosition = offset.x + spacing.x * column - 2.35f;
 
         // Forward (z)
-        float forwardPosition = (offset.z + spacing.z * row) - 1.5f;// -1.5f * this.transform.localScale.z;
+        float forwardPosition = offset.z + spacing.z * row - 1.5f;
 
-        Transform go = Instantiate(Objects[index], this.transform);
-        go.localPosition = new Vector3(rightPosition, upPosition, forwardPosition);
-
-        //Vector3 temp = this.transform.InverseTransformPoint(Vector3.one);
-        //temp.Scale(Objects[index].transform.localScale);
-
-        //go.localScale = temp;
-        //go.Rotate(45f, 0f, 0f);
-
-        go.gameObject.AddComponent<NearInteractionGrabbable>();
-        go.gameObject.AddComponent<Interactable>();
-        go.gameObject.AddComponent<ConstraintManager>();
-        go.gameObject.AddComponent<ObjectManipulator>();
-        go.gameObject.SetActive(true);
-
-        go.gameObject.GetComponent<ObjectManipulator>().OnManipulationEnded.AddListener(this.handleDisplacement);
-        this.Elements.Add(go.gameObject, go.transform.localPosition);
-        this.Scales.Add(go.gameObject, go.transform.localScale.x);
-
+        // After figuring out the position, call for objmanager to do the spawning
+        ObjManager.CreateObject(index, new Vector3(rightPosition, upPosition, forwardPosition));
     }
     void Start()
     {
-        this.Elements = new Dictionary<GameObject, Vector3>();
-        this.Scales = new Dictionary<GameObject, float>();
-
-        this.Rows = this.Objects.Length / this.Columns;
-        //Vector3 maxBounds = this.transform.localPosition + this.transform.localScale;
-        this.GetBounds();
+        this.ObjManager = this.gameObject.GetComponent<ObjectManager>();
+        this.Rows = this.ObjManager.Objects.Length / this.Columns;
+        this.CalculateBounds();
 
         float spacingX = this.widthX / this.Columns;
-        float spacingZ = this.heightZ / (this.Rows + Convert.ToInt32(this.Objects.Length % this.Rows != 0));
-        Vector3 spacing = new Vector3(spacingX, 0, spacingZ);
+        float spacingZ = this.heightZ / (this.Rows + Convert.ToInt32(this.ObjManager.Objects.Length % this.Rows !=0));
+        Vector3 spacing = new Vector3(spacingX , 0, spacingZ);
         Vector3 offset = spacing / 2;
-
+        // Calcualtes where the objects should be spawned, and passes information to objmanager to do the spawning
+        #region Calculate+Spawn
         int index = 0;
         int row = 0; int column = 0;
+
+        
         for (row = 0; row < this.Rows; row++)
         {
             for (column = 0; column < this.Columns; column++)
             {
                 index = this.Columns * row + column;
-
-                this.CreateObject(index, row, column, offset, spacing);
+                
+                this.CaculateObjectPosition(index, row, column, offset, spacing);
             }
         }
-        // Extra row
+        // Leftover elements as result of truncation
         for (column = 0; column < this.Columns; column++)
         {
             index = this.Columns * row + column;
-            if (index >= this.Objects.Length)
+            if(index >= this.ObjManager.Objects.Length)
             {
                 break;
             }
-
-            this.CreateObject(index, row, column, offset, spacing);
+        
+            this.CaculateObjectPosition(index, row, column, offset, spacing);
         }
-
+        #endregion
+        // Rotate the box 45 degree towards user so its easier to see
         this.transform.Rotate(new Vector3(1, 0, 0), -45);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
 
-    }
-
-    public void handleDisplacement(ManipulationEventData data)
-    {
-        GameObject obj = data.ManipulationSource;
-
-        if ((obj.transform.localPosition - this.Elements[obj]).magnitude > obj.transform.localScale.magnitude)
-        {
-            Debug.Log("spawn new");
-            //Spawn new
-            GameObject newObject = Instantiate(obj, this.transform);
-            newObject.transform.localPosition = this.Elements[obj];
-            newObject.transform.localScale = new Vector3(this.Scales[obj], this.Scales[obj], this.Scales[obj]);
-            newObject.transform.localRotation = Quaternion.Euler(0, 0, 0);
-            newObject.gameObject.GetComponent<ObjectManipulator>().OnManipulationEnded.AddListener(this.handleDisplacement);
-
-            obj.transform.SetParent(null, true);
-            this.Elements.Remove(obj);
-            this.Elements.Add(newObject, newObject.transform.localPosition);
-
-
-            this.Scales.Remove(obj);
-            this.Scales.Add(newObject, newObject.transform.localScale.x);
-
-            obj?.gameObject?.GetComponent<ObjectManipulator>()?.OnManipulationEnded?.RemoveListener(this.handleDisplacement);
-
-        }
-        else
-        {
-            Debug.Log("reset position");
-            Debug.Log("ORIGINAL POS+ " + this.Elements[obj]);
-            Debug.Log("now POS+ " + obj.transform.localPosition);
-
-
-            //Reset position
-            obj.transform.localPosition = this.Elements[obj];//.SetPositionAndRotation(this.Elements[obj].position, this.Elements[obj].rotation);
-            obj.transform.localRotation = Quaternion.Euler(0, 0, 0);
-            obj.transform.localScale = new Vector3(this.Scales[obj], this.Scales[obj], this.Scales[obj]);
-
-        }
-    }
-    public void ColorUpdated()
-    {
-        foreach (GameObject g in this.Elements.Keys)
-        {
-            g.GetComponent<MeshRenderer>().material.color = GameObject.Find("3DButton").GetComponent<MeshRenderer>().material.color;
-
-        }
-    }
-    public void MaterialUpdated(Material newMaterial)
-    {
-        foreach (GameObject g in this.Elements.Keys)
-        {
-            g.GetComponent<MeshRenderer>().material = newMaterial;
-            g.GetComponent<MeshRenderer>().material.color = GameObject.Find("3DButton").GetComponent<MeshRenderer>().material.color;
-
-        }
-    }
-    private void OnDestroy()
-    {
-        foreach (GameObject g in this.Elements.Keys)
-        {
-            g?.gameObject?.GetComponent<ObjectManipulator>()?.OnManipulationEnded?.RemoveListener(this.handleDisplacement);
-        }
-    }
 }
