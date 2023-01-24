@@ -670,6 +670,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TableAnchor
       objectReference: {fileID: 0}
+    - target: {fileID: 6931196017462994529, guid: 027a280457906a64aa8223f89eaac773, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6931196017462994534, guid: 027a280457906a64aa8223f89eaac773, type: 3}
       propertyPath: m_RootOrder
       value: 0
