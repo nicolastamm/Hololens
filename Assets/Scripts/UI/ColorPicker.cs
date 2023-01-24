@@ -215,7 +215,7 @@ using UnityEngine;
             transform.localScale = Vector3.one;
         //transform.position = GameObject.Find(container.name + "/Anchor").transform.position;
             TargetObjectMesh = this.PickerUIMeshes[0];
-           // TargetObjectSprite = GameObject.Find("3DButton").GetComponent<SpriteRenderer>();
+
             ExtractColorFromMaterial(TargetObjectMesh);
         }
         /// <summary>
@@ -344,6 +344,7 @@ using UnityEngine;
             SliderHue.SliderValue = Mathf.Clamp(Hue, 0, 1);
             SliderSaturation.SliderValue = Mathf.Clamp(Saturation, 0, 1);
             SliderBrightness.SliderValue = Mathf.Clamp(Brightness, 0, 1);
+        ApplyColor();
         }
         #endregion
     }

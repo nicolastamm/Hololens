@@ -15,5 +15,6 @@ EditorBuildSettings:
     path: Assets/Scenes/MultipleUsers.unity
     guid: 6027ea9d70c3e1e40a31557ab59d3e07
   m_configObjects:
+    Unity.XR.WindowsMR.Settings: {fileID: 11400000, guid: 3d667f397c2c3a14683ae282ffa53752, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: e9795fbb0fd81444b991705b00039828, type: 2}
     com.unity.xr.openxr.settings4: {fileID: 11400000, guid: baaf6b235b116df4189270242910e5be, type: 2}

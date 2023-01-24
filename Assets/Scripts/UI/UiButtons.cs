@@ -1,12 +1,15 @@
 using Microsoft.MixedReality.Toolkit.UI;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class UiButtons : MonoBehaviour
-{   
-    enum State { Playing, Paused};
+{
+    enum State { Playing, Paused };
     State currentState;
+    [Serializable]
+    public enum Option { Play = 1, Pause = 2, Toggle = 3 };
     public PhysicsSimulation ps;
     public GameObject PlayButton;
     public GameObject LoadButton;
@@ -18,8 +21,9 @@ public class UiButtons : MonoBehaviour
         this.PlayButton.GetComponent<ButtonConfigHelper>().MainLabelText = "Play";
         this.PlayButton.GetComponent<ButtonConfigHelper>().SetQuadIconByName("IconDone");
     }
-    public void onPlayButtonPressed() { 
-        if(this.currentState == State.Paused)
+    public void onPlayButtonPressed(int option_int) {
+        Option option = (Option)option_int;
+        if (this.currentState == State.Paused && (option == Option.Play || option == Option.Toggle))
         {
             this.currentState = State.Playing;
             this.ps.Play();
@@ -28,7 +32,7 @@ public class UiButtons : MonoBehaviour
             this.PlayButton.GetComponent<ButtonConfigHelper>().SetQuadIconByName("IconClose");
 
         }
-        else
+        else if(this.currentState == State.Playing && (option == Option.Pause || option == Option.Toggle))
         {
             this.currentState = State.Paused;
             this.ps.Pause();

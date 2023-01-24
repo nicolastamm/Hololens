@@ -3,6 +3,7 @@ using UnityEngine;
 using System;
 using Microsoft.MixedReality.Toolkit.UI;
 using Microsoft.MixedReality.Toolkit.Input;
+using UnityEditor;
 /// <summary>
 /// ObjectManager manages everything for the objects that are inside the block box
 /// It provides a CreateObject function that gets called from LayoutManger to instantiate all objects
@@ -97,8 +98,8 @@ public class ObjectManager : MonoBehaviour
             this.Elements.Remove(obj);
             this.Scales.Remove(obj);
             obj.gameObject.GetComponent<ObjectManipulator>().OnManipulationEnded.RemoveListener(this.HandleDisplacement);
-            obj.gameObject.AddComponent<PhysicsObject>();
-
+            // If simulation is already running, the new object should be running as well
+            this.GetComponent<PhysicsSimulation>().Append(obj.gameObject.AddComponent<PhysicsObject>());
             // Put the new one in
             this.Elements.Add(newObject, newObject.transform.localPosition);
             this.Scales.Add(newObject, newObject.transform.localScale.x);
