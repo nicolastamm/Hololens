@@ -414,6 +414,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5722a74fd746dae448885fc524c1f04e, type: 3}
+--- !u!114 &723768829 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1761053934, guid: 5722a74fd746dae448885fc524c1f04e, type: 3}
+  m_PrefabInstance: {fileID: 723768828}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a91ffa8a0714fbd40be82dc66ef5506a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &770923636
 GameObject:
   m_ObjectHideFlags: 0
@@ -1614,7 +1625,7 @@ MonoBehaviour:
     response:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 723768829}
           m_TargetAssemblyTypeName: TutorialScript, Assembly-CSharp
           m_MethodName: Next
           m_Mode: 1
@@ -1642,7 +1653,7 @@ MonoBehaviour:
     response:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 723768829}
           m_TargetAssemblyTypeName: TutorialScript, Assembly-CSharp
           m_MethodName: onYesPressed
           m_Mode: 1
@@ -1670,7 +1681,7 @@ MonoBehaviour:
     response:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 723768829}
           m_TargetAssemblyTypeName: TutorialScript, Assembly-CSharp
           m_MethodName: onNoPressed
           m_Mode: 1
