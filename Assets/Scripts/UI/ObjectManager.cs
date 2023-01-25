@@ -117,7 +117,6 @@ public class ObjectManager : MonoBehaviour
     /// </summary>
     public void ColorUpdated()
     {
-        Debug.Log("CALLED");
         foreach (GameObject g in this.Elements.Keys)
         {
             g.GetComponent<MeshRenderer>().material.color = this.ColorObject.GetComponent<MeshRenderer>().material.color;
