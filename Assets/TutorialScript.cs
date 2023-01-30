@@ -31,10 +31,10 @@ public class TutorialScript : MonoBehaviour
     
     public void Next()
     {
-        Debug.Log("1");
+        //Debug.Log("1");
 
         this.NextButton.SetActive(true);
-        Debug.Log("2");
+        //Debug.Log("2");
 
         if (index == 0)
         {
