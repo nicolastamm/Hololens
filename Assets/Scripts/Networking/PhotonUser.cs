@@ -14,6 +14,7 @@ namespace MRTK.Tutorials.MultiUserCapabilities
 
             if (!pv.IsMine) return;
 
+
             username = "User" + PhotonNetwork.NickName;
             pv.RPC("PunRPC_SetNickName", RpcTarget.AllBuffered, username);
         }
@@ -23,6 +24,5 @@ namespace MRTK.Tutorials.MultiUserCapabilities
         {
             gameObject.name = nName;
         }
-
     }
 }

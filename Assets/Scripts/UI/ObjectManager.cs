@@ -4,6 +4,7 @@ using System;
 using Microsoft.MixedReality.Toolkit.UI;
 using Microsoft.MixedReality.Toolkit.Input;
 using UnityEditor;
+using MRTK.Tutorials.MultiUserCapabilities;
 /// <summary>
 /// ObjectManager manages everything for the objects that are inside the block box
 /// It provides a CreateObject function that gets called from LayoutManger to instantiate all objects
@@ -32,6 +33,9 @@ public class ObjectManager : MonoBehaviour
     Dictionary<GameObject, float> Scales;
     // Reference objects that we want to spawn
     public Transform[] Objects;
+
+    // Networked Room Object to Network.Instantiate the building blocks.
+    public PhotonRoom photonRoom;
 
     private Layout LayoutManager;
     /// <summary>
@@ -85,6 +89,13 @@ public class ObjectManager : MonoBehaviour
         {
 
             GameObject newObject = Instantiate(obj, this.transform);
+
+            //NETWORKING TESTING CODE
+
+            photonRoom.CreateObject(obj.tag, obj.transform.position, obj.transform.rotation);
+
+            //NETWORKING TESTING CODE
+
             // Using the original attributes of oldObject
             newObject.transform.localPosition = this.Elements[obj]; 
             newObject.transform.localScale = new Vector3(this.Scales[obj], this.Scales[obj], this.Scales[obj]);

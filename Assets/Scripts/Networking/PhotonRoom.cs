@@ -8,12 +8,25 @@ namespace MRTK.Tutorials.MultiUserCapabilities
     {
         public static PhotonRoom Room;
 
-        [SerializeField] private GameObject photonUserPrefab = default;
+        // Player Prefab
+        [SerializeField] private GameObject photonUserPrefab      = default;
+
+
+        //Building Blocks Prefabs
+        [SerializeField] private GameObject photonCubePrefab      = default;
+        [SerializeField] private GameObject photonColumnPrefab    = default;
+        [SerializeField] private GameObject photonBrickPrefab     = default;
+        [SerializeField] private GameObject photonArchBrickPrefab = default;
+        [SerializeField] private GameObject photonConePrefab      = default;
+        [SerializeField] private GameObject photonDomePrefab      = default;
+
 
         // private PhotonView pv;
         private Player[] photonPlayers;
         private int playersInRoom;
         private int myNumberInRoom;
+
+        // Used to assign the player to the object manager on player instantiation.
 
         // private GameObject module;
         // private Vector3 moduleLocation = Vector3.zero;
@@ -55,10 +68,18 @@ namespace MRTK.Tutorials.MultiUserCapabilities
 
         private void Start()
         {
-            // Allow prefabs not in a Resources folder
+            // Allow prefabs not in a Resources folder.
             if (PhotonNetwork.PrefabPool is DefaultPool pool)
             {
-                if (photonUserPrefab != null) pool.ResourceCache.Add(photonUserPrefab.name, photonUserPrefab);
+                if (photonUserPrefab      != null) pool.ResourceCache.Add(photonUserPrefab.name     , photonUserPrefab);
+                if (photonCubePrefab      != null) pool.ResourceCache.Add(photonCubePrefab.name     , photonCubePrefab);
+                if (photonBrickPrefab     != null) pool.ResourceCache.Add(photonBrickPrefab.name    , photonBrickPrefab);
+                if (photonArchBrickPrefab != null) pool.ResourceCache.Add(photonArchBrickPrefab.name, photonArchBrickPrefab);
+                if (photonColumnPrefab    != null) pool.ResourceCache.Add(photonColumnPrefab.name   , photonColumnPrefab);
+                if (photonConePrefab      != null) pool.ResourceCache.Add(photonConePrefab.name     , photonConePrefab);
+                if (photonDomePrefab      != null) pool.ResourceCache.Add(photonDomePrefab.name     , photonDomePrefab);
+
+
             }
         }
 
@@ -84,6 +105,10 @@ namespace MRTK.Tutorials.MultiUserCapabilities
             var player = PhotonNetwork.Instantiate(photonUserPrefab.name, Vector3.zero, Quaternion.identity);
         }
 
+        public void CreateObject(string prefabName, Vector3 startPosition, Quaternion startRotation)
+        {
+            PhotonNetwork.InstantiateRoomObject(prefabName, startPosition, startRotation);
+        }
         // private void CreateMainLunarModule()
         // {
         //     module = PhotonNetwork.Instantiate(roverExplorerPrefab.name, Vector3.zero, Quaternion.identity);
