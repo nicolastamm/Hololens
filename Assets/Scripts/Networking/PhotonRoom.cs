@@ -9,8 +9,6 @@ namespace MRTK.Tutorials.MultiUserCapabilities
         public static PhotonRoom Room;
 
         [SerializeField] private GameObject photonUserPrefab = default;
-        [SerializeField] private GameObject roverExplorerPrefab = default;
-        [SerializeField] private Transform roverExplorerLocation = default;
 
         // private PhotonView pv;
         private Player[] photonPlayers;
@@ -57,14 +55,10 @@ namespace MRTK.Tutorials.MultiUserCapabilities
 
         private void Start()
         {
-            // pv = GetComponent<PhotonView>();
-
             // Allow prefabs not in a Resources folder
             if (PhotonNetwork.PrefabPool is DefaultPool pool)
             {
                 if (photonUserPrefab != null) pool.ResourceCache.Add(photonUserPrefab.name, photonUserPrefab);
-
-                if (roverExplorerPrefab != null) pool.ResourceCache.Add(roverExplorerPrefab.name, roverExplorerPrefab);
             }
         }
 
@@ -82,26 +76,12 @@ namespace MRTK.Tutorials.MultiUserCapabilities
 
         private void StartGame()
         {
-            CreatPlayer();
-
-            if (!PhotonNetwork.IsMasterClient) return;
-
-            if (TableAnchor.Instance != null) CreateInteractableObjects();
+            CreatePlayer();
         }
 
-        private void CreatPlayer()
+        private void CreatePlayer()
         {
             var player = PhotonNetwork.Instantiate(photonUserPrefab.name, Vector3.zero, Quaternion.identity);
-        }
-
-        private void CreateInteractableObjects()
-        {
-            var position = roverExplorerLocation.position;
-            var positionOnTopOfSurface = new Vector3(position.x, position.y + roverExplorerLocation.localScale.y / 2,
-                position.z);
-
-            var go = PhotonNetwork.Instantiate(roverExplorerPrefab.name, positionOnTopOfSurface,
-                roverExplorerLocation.rotation);
         }
 
         // private void CreateMainLunarModule()
