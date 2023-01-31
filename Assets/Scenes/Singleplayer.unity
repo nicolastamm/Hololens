@@ -173,6 +173,17 @@ MonoBehaviour:
   showHandleForX: 0
   showHandleForY: 0
   showHandleForZ: 0
+--- !u!114 &553267945 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 656307547, guid: d0f29275934de554aa3984005cdd1d8d, type: 3}
+  m_PrefabInstance: {fileID: 2710573722380997987}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef88514061650204cae45da1eb2494a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &703108805
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -421,6 +432,24 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &960060843 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7558149908486844957, guid: d0f29275934de554aa3984005cdd1d8d, type: 3}
+  m_PrefabInstance: {fileID: 2710573722380997987}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &960060859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 960060843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1796dc1067b20224a8ff69016bb43135, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  manager: {fileID: 553267945}
 --- !u!1 &1005892016
 GameObject:
   m_ObjectHideFlags: 0
@@ -1357,6 +1386,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1530574508 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7249019852180672540, guid: d0f29275934de554aa3984005cdd1d8d, type: 3}
+  m_PrefabInstance: {fileID: 2710573722380997987}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7374190529141ec4a8a026f1d0a537de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2083895597
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1436,6 +1476,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 417470111, guid: d0f29275934de554aa3984005cdd1d8d, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 418176388, guid: d0f29275934de554aa3984005cdd1d8d, type: 3}
       propertyPath: translationHandlesConfiguration
       value: 
@@ -1540,9 +1584,38 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2710573722452409402, guid: d0f29275934de554aa3984005cdd1d8d, type: 3}
+      propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1530574508}
+    - target: {fileID: 2710573722452409402, guid: d0f29275934de554aa3984005cdd1d8d, type: 3}
+      propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SummonColorPicker
+      objectReference: {fileID: 0}
+    - target: {fileID: 2710573722452409402, guid: d0f29275934de554aa3984005cdd1d8d, type: 3}
+      propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Microsoft.MixedReality.Toolkit.Experimental.ColorPicker.ColorPicker,
+        Microsoft.MixedReality.Toolkit.SDK
+      objectReference: {fileID: 0}
+    - target: {fileID: 3291673654417984557, guid: d0f29275934de554aa3984005cdd1d8d, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3291673654417984557, guid: d0f29275934de554aa3984005cdd1d8d, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 10302, guid: 0000000000000000f000000000000000, type: 0}
+    - target: {fileID: 3291673654417984557, guid: d0f29275934de554aa3984005cdd1d8d, type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: c4a1b7475a654dd0acaa0cfdfba2e20c, type: 2}
     - target: {fileID: 6586679111758998774, guid: d0f29275934de554aa3984005cdd1d8d, type: 3}
       propertyPath: m_Mesh
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7249019852180672540, guid: d0f29275934de554aa3984005cdd1d8d, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8745985243088501600, guid: d0f29275934de554aa3984005cdd1d8d, type: 3}
       propertyPath: m_Mesh
@@ -1556,4 +1629,5 @@ PrefabInstance:
     - {fileID: 8745985245032057266, guid: d0f29275934de554aa3984005cdd1d8d, type: 3}
     - {fileID: 8745985243088501535, guid: d0f29275934de554aa3984005cdd1d8d, type: 3}
     - {fileID: 3604623130654206487, guid: d0f29275934de554aa3984005cdd1d8d, type: 3}
+    - {fileID: 417470111, guid: d0f29275934de554aa3984005cdd1d8d, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: d0f29275934de554aa3984005cdd1d8d, type: 3}

@@ -1,12 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 using UnityEngine;
 using System;
-
+/// <summary>
+/// Used for duplicating objects
+/// </summary>
 public class DuplicateCollider : MonoBehaviour
 {
+    /// <summary>
+    /// Only allow for collision once every 'timer' seconds
+    /// </summary>
     float timer = 0f;
 
     public void Update()

@@ -1,9 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 using Microsoft.MixedReality.Toolkit.UI;
 using Microsoft.MixedReality.Toolkit.Input;
-using UnityEditor;
 using MRTK.Tutorials.MultiUserCapabilities;
 /// <summary>
 /// ObjectManager manages everything for the objects that are inside the block box
@@ -36,9 +34,13 @@ public class ObjectManager : MonoBehaviour
 
     // Networked Room Object to Network.Instantiate the building blocks.
     public PhotonRoom photonRoom;
-    public bool usingNetworking = false; 
+    /// <summary>
+    /// Enable this boolean if you want networking
+    /// </summary>
+    public bool usingNetworking = false;
 
     private Layout LayoutManager;
+
     /// <summary>
     /// 
     /// </summary>
@@ -55,7 +57,6 @@ public class ObjectManager : MonoBehaviour
         go.gameObject.AddComponent<ObjectManipulator>();
         // Layer for PhysicsObjects, when simulation is started/stopped everything in this layer
         // has physics attributes modified
-        //go.gameObject.layer = 6; 
         //maybe toglable 
         var rigid = go.gameObject.AddComponent<Rigidbody>();
         rigid.isKinematic = true;

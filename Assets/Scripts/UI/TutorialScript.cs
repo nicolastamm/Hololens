@@ -1,7 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+/// <summary>
+/// Tutorial script, spawned at game start.
+/// It explains the game to the player through text.
+/// Supports voice commands.
+/// 
+/// Known limitations:
+/// Right now the tutorial is text only, in the future integrate hand coach to also visual explain the gestures,
+/// and automatically go to next text after the gesture is applied by user
+/// </summary>
+
 public class TutorialScript : MonoBehaviour
 {
     
@@ -9,18 +17,24 @@ public class TutorialScript : MonoBehaviour
     public GameObject NoButton;
     public GameObject NextButton;
     public TextMeshProUGUI Text;
+
     private int index;
     private void Start()
     {
         index = 0;
     }
+    /// <summary>
+    /// If yes is pressed, we start the tutorial text
+    /// </summary>
     public void onYesPressed()
     {
         this.YesButton.SetActive(false);
         this.NoButton.SetActive(false);
         this.Next();
     }
-
+    /// <summary>
+    /// If no is pressed, we disable the tutorial object
+    /// </summary>
     public void onNoPressed()
     {
         this.YesButton.SetActive(false);
@@ -28,14 +42,12 @@ public class TutorialScript : MonoBehaviour
 
         this.gameObject.SetActive(false);
     }
-    
+    /// <summary>
+    /// Iterates through the tutorial, until it reaches the end and disables the tutorial
+    /// </summary>
     public void Next()
     {
-        //Debug.Log("1");
-
         this.NextButton.SetActive(true);
-        //Debug.Log("2");
-
         if (index == 0)
         {
             Text.text = "<size=42><b>Game Description</b></size>\r\n\r\nWelcome to \"VirtualArchitects\". Engineer virtual buildings in AR with your friends!";
@@ -94,7 +106,6 @@ public class TutorialScript : MonoBehaviour
         else if(index == 11)
         {
             this.gameObject.SetActive(false);
-
         }
 
     }

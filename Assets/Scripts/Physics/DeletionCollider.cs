@@ -1,10 +1,8 @@
-using Microsoft.MixedReality.Toolkit.UI;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-
+/// <summary>
+/// Used for deletion functionality
+/// </summary>
 public class DeletionCollider : MonoBehaviour
 {
 
