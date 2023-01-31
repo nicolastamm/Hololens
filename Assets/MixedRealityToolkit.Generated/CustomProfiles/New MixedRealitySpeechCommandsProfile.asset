@@ -17,14 +17,14 @@ MonoBehaviour:
   recognitionConfidenceLevel: 1
   speechCommands:
   - localizationKey: 
-    keyword: Play
+    keyword: Start Simulation
     keyCode: 0
     action:
       id: 0
       description: None
       axisConstraint: 0
   - localizationKey: 
-    keyword: Pause
+    keyword: Pause Simulation
     keyCode: 57
     action:
       id: 0

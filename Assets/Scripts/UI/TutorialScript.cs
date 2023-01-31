@@ -38,7 +38,7 @@ public class TutorialScript : MonoBehaviour
 
         if (index == 0)
         {
-            Text.text = "<size=42><b>Game Description</b></size>\r\n\r\nWelcome to ARnginARing. Engineer virtual buildings in AR with your friends!";
+            Text.text = "<size=42><b>Game Description</b></size>\r\n\r\nWelcome to \"VirtualArchitects\". Engineer virtual buildings in AR with your friends!";
             index++;
         }
         else if (index == 1)
@@ -78,12 +78,12 @@ public class TutorialScript : MonoBehaviour
         }
         else if(index == 8)
         {
-            Text.text = "<size=42><b>Gameplay</b></size>\r\n\r\nStack the object to create the desired building. Once you are done, say \"Play\" to start a real simulation.";
+            Text.text = "<size=42><b>Gameplay</b></size>\r\n\r\nStack the object to create the desired building. Once you are done, say \"Start Simulation\" to start a real simulation.";
             index++;
         }
         else if(index == 9)
         {
-            Text.text = "<size=42><b>Gameplay</b></size>\r\n\r\nYou can say \"Pause\" to stop the simulation and modify your building.";
+            Text.text = "<size=42><b>Gameplay</b></size>\r\n\r\nYou can say \"Stop Simulation\" to stop the simulation and modify your building.";
             index++;
         }
         else if(index == 10)
@@ -94,7 +94,6 @@ public class TutorialScript : MonoBehaviour
         else if(index == 11)
         {
             this.gameObject.SetActive(false);
-            Debug.Log("56");
 
         }
 

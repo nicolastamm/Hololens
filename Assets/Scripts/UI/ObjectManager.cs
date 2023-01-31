@@ -36,6 +36,7 @@ public class ObjectManager : MonoBehaviour
 
     // Networked Room Object to Network.Instantiate the building blocks.
     public PhotonRoom photonRoom;
+    public bool usingNetworking = false; 
 
     private Layout LayoutManager;
     /// <summary>
@@ -91,9 +92,10 @@ public class ObjectManager : MonoBehaviour
             GameObject newObject = Instantiate(obj, this.transform);
 
             //NETWORKING TESTING CODE
-
-            photonRoom.CreateObject(obj.tag, obj.transform.position, obj.transform.rotation);
-
+            if(usingNetworking)
+            {
+                photonRoom.CreateObject(obj.tag, obj.transform.position, obj.transform.rotation);
+            }
             //NETWORKING TESTING CODE
 
             // Using the original attributes of oldObject
